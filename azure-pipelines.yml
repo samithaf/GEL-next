@@ -27,7 +27,7 @@ stages:
       inputs:
         contents: '**/source.zip'
         targetFolder: '$(Build.ArtifactStagingDirectory)'
-    - publish: '$(Build.ArtifactStagingDirectory)/dist'
+    - publish: '$(Build.ArtifactStagingDirectory)/source.zip'
       displayName: 'Publish script'
       artifact: drop
 
