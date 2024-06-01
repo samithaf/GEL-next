@@ -14,17 +14,18 @@ stages:
     steps:
     - task: Bash@3
       inputs:
-        script: ls -a
+        targetType: 'inline'
+        script: mkdir -p repo/src && mkdir -p repo/lib && echo '' >> repo/lib/blank.txt && rsync -a --exclude={'**.git/','**test.*','**spec.*','**.vscode/','**README.md','**mock-data/','**mocks/'} . ./src 
+    - task: CopyFiles@2
+      displayName: 'Copy scripts'
+      inputs:
+        contents: '*/src'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+        
 
-#     - task: CopyFiles@2
-#       displayName: 'Copy scripts'
-#       inputs:
-#         contents: 'scripts/**'
-#         targetFolder: '$(Build.ArtifactStagingDirectory)'
-
-#     - publish: '$(Build.ArtifactStagingDirectory)/scripts'
-#       displayName: 'Publish script'
-#       artifact: drop
+    - publish: '$(Build.ArtifactStagingDirectory)/scripts'
+      displayName: 'Publish script'
+      artifact: drop
 
 # - stage: test
 #   dependsOn: prepare
