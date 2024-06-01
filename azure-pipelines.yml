@@ -23,7 +23,7 @@ stages:
         targetFolder: '$(Build.ArtifactStagingDirectory)'
         
 
-    - publish: '$(Build.ArtifactStagingDirectory)/scripts'
+    - publish: '$(Build.ArtifactStagingDirectory)/src'
       displayName: 'Publish script'
       artifact: drop
 
