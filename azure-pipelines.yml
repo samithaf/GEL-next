@@ -25,7 +25,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy scripts'
       inputs:
-        contents: 'dist/**'
+        contents: 'dist/source.zip'
         targetFolder: '$(Build.ArtifactStagingDirectory)'
         
 
