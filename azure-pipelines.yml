@@ -16,7 +16,7 @@ stages:
       displayName: 'Create Artifact'
       inputs:
         targetType: 'inline'
-        script: mkdir -p $(Build.SourcesDirectory)/dist/src && mkdir -p $(Build.SourcesDirectory)/lib && echo '' >> $(Build.SourcesDirectory)/lib/blank.txt && rsync -a --exclude={'**.git/','**test.*','**spec.*','**.vscode/','**dist/','**README.md','**.svg','**.png','**mock-data/','**mocks/'} $(Build.SourcesDirectory) $(Build.SourcesDirectory)/dist 
+        script: mkdir -p $(Build.SourcesDirectory)/dist/src && mkdir -p $(Build.SourcesDirectory)/lib && echo '' >> $(Build.SourcesDirectory)/lib/blank.txt && rsync -a --exclude={'**.git/','**test.*','**spec.*','**.vscode/','**dist/','**.md','**.svg','**.png','**.zip','**.yaml','**mocks/'} $(Build.SourcesDirectory) $(Build.SourcesDirectory)/dist 
     - task: CopyFiles@2
       displayName: 'Copy scripts'
       inputs:
