@@ -25,10 +25,8 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy scripts'
       inputs:
-        contents: 'dist/*.zip'
+        contents: '**/*.zip'
         targetFolder: '$(Build.ArtifactStagingDirectory)'
-        
-
     - publish: '$(Build.ArtifactStagingDirectory)/dist'
       displayName: 'Publish script'
       artifact: drop
