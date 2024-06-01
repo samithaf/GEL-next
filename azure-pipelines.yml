@@ -21,7 +21,7 @@ stages:
       displayName: 'Create the zip'
       inputs:
         targetType: 'inline'
-        script: cd $(Build.SourcesDirectory)/dist && zip -r $(Build.SourcesDirectory)/source.zip .
+        script: cd $(Build.SourcesDirectory)/dist && zip -r $(Build.SourcesDirectory)/source.zip $(Build.SourcesDirectory)/dist
     - task: CopyFiles@2
       displayName: 'Copy scripts'
       inputs:
