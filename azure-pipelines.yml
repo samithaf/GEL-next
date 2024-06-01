@@ -17,6 +17,11 @@ stages:
       inputs:
         targetType: 'inline'
         script: mkdir -p $(Build.SourcesDirectory)/dist/src && mkdir -p $(Build.SourcesDirectory)/lib && echo '' >> $(Build.SourcesDirectory)/lib/blank.txt && rsync -a --exclude={'**.git/','**test.*','**spec.*','**.vscode/','**dist/','**.md','**.svg','**.png','**.zip','**.yaml','**mocks/'} $(Build.SourcesDirectory) $(Build.SourcesDirectory)/dist 
+    - task: Bash@3
+      displayName: 'Create the zip'
+      inputs:
+        targetType: 'inline'
+        script: cd $(Build.SourcesDirectory)/dist && zip -r $(Build.SourcesDirectory)/source.zip .
     - task: CopyFiles@2
       displayName: 'Copy scripts'
       inputs:
