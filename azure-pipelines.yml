@@ -13,29 +13,26 @@ stages:
       vmImage: 'ubuntu-latest'
     steps:
     - task: Bash@3
-      displayName: 'Create Artifact'
+      displayName: 'Create dist folder'
       inputs:
         targetType: 'inline'
-        script: mkdir -p $(Build.SourcesDirectory)/dist/src && mkdir -p $(Build.SourcesDirectory)/dist/lib && echo '' >> $(Build.SourcesDirectory)/dist/lib/blank.txt && rsync -a --exclude={'**.git/','**test.*','**spec.*','**.vscode/','**dist/','**.md','**.svg','**.png','**.zip','**.yaml','**mocks/'} $(Build.SourcesDirectory)/ $(Build.SourcesDirectory)/dist/src/
+        script: |
+          mkdir -p $(Build.SourcesDirectory)/.dist/src 
+          mkdir -p $(Build.SourcesDirectory)/.dist/lib && echo '' >> $(Build.SourcesDirectory)/.dist/lib/blank.txt 
+          rsync rsync -aF -m $(Build.SourcesDirectory)/ $(Build.SourcesDirectory)/.dist/src/
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/dist' # string. Required. Root folder or file to archive. Default: $(Build.BinariesDirectory).
-        includeRootFolder: false # boolean. Prepend root folder name to archive paths. Default: true.
-      # Archive
-        archiveType: 'zip' # 'zip' | '7z' | 'tar' | 'wim'. Required. Archive type. Default: zip.
-        #sevenZipCompression: 'normal' # 'ultra' | 'maximum' | 'normal' | 'fast' | 'fastest' | 'none'. Optional. Use when archiveType = 7z. 7z compression. Default: normal.
-        #tarCompression: 'gz' # 'gz' | 'bz2' | 'xz' | 'none'. Optional. Use when archiveType = tar. Tar compression. Default: gz.
-        archiveFile: '$(Build.ArtifactStagingDirectory)/source.zip' # string. Required. Archive file to create. Default: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip.
-        #replaceExistingArchive: true # boolean. Replace existing archive. Default: true.
-        #verbose: false # boolean. Force verbose output. Default: false.
-        #quiet: false # boolean. Force quiet output. Default: false.
+        rootFolderOrFile: '$(Build.SourcesDirectory)/.dist'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/source.zip'
     - task: CopyFiles@2
-      displayName: 'Copy scripts'
+      displayName: 'Copy source zip'
       inputs:
         contents: '**/source.zip'
         targetFolder: '$(Build.ArtifactStagingDirectory)'
     - publish: '$(Build.ArtifactStagingDirectory)/source.zip'
-      displayName: 'Publish script'
+      displayName: 'Publish source zip'
       artifact: drop
 
 - stage: test
