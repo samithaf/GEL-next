@@ -1,4 +1,5 @@
 - .git
+- .dist
 - .storybook
 - .changeset
 - node_modules
