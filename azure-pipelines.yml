@@ -19,7 +19,7 @@ stages:
         script: |
           mkdir -p $(Build.SourcesDirectory)/.dist/src 
           mkdir -p $(Build.SourcesDirectory)/.dist/lib && echo '' >> $(Build.SourcesDirectory)/.dist/lib/blank.txt 
-          rsync rsync -aF -m $(Build.SourcesDirectory)/ $(Build.SourcesDirectory)/.dist/src/
+          rsync -aF -m $(Build.SourcesDirectory)/ $(Build.SourcesDirectory)/.dist/src/
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: '$(Build.SourcesDirectory)/.dist'
