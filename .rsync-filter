@@ -1,3 +1,4 @@
+- .git
 - .storybook
 - .changeset
 - node_modules
