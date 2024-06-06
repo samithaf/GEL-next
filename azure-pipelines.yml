@@ -20,7 +20,7 @@ stages:
         inputs:
          targetType: inline
          script: |
-          echo "##vso[task.setvariable variable=snyk_cmd]monitor"
+          echo "##vso[task.setvariable variable=snyk_cmd]test"
       - task: Bash@3
         displayName: 'Snyk init stage 2'
         condition: and(succeeded(), eq(variables.isMain, false))
