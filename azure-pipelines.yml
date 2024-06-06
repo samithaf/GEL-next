@@ -29,3 +29,12 @@ stages:
          script: |
           echo "##vso[task.setvariable variable=snyk_cmd]test"
       - bash: echo "my environment variable is $SNYK_CMD"
+      - task: CmdLine@2
+        displayName: "Snyk scan"
+        inputs:
+          script: |
+            docker run --rm \
+              --env SNYK_TOKEN \
+              --env DEBUG=1 \
+              -v $(Build.SourcesDirectory):/app \
+              snyk/snyk:node-20 snyk ${SNYK_CMD} --all-projects --org='foo' --remote-repo-url=GEL-next --project-tags=applicationid=A00C6A,componenttype=ui,buildnumber=0.0.$(Build.BuildId)
