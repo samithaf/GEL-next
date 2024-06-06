@@ -15,12 +15,17 @@ stages:
   - job: snyk
     steps:
       - task: Bash@3
-        displayName: 'Snyk scan'
+        displayName: 'Snyk init stage 1'
+        condition: and(succeeded(), eq(variables.isMain, true))
         inputs:
          targetType: inline
          script: |
-          if [[ "$IS_MAIN" == true ]]; then cmd="monitor"; else cmd="test"; fi
-          echo cmd
-          # docker run --rm -it --env SNYK_TOKEN -v $(Build.SourcesDirectory):/app snyk/snyk:node
-        env:
-          IS_MAIN: $(isMain)
+          echo "##vso[task.setvariable variable=snyk_cmd]monitor"
+      - task: Bash@3
+        displayName: 'Snyk init stage 2'
+        condition: and(succeeded(), eq(variables.isMain, false))
+        inputs:
+         targetType: inline
+         script: |
+          echo "##vso[task.setvariable variable=snyk_cmd]test"
+      - bash: echo "my environment variable is $SNYK_CMD"
