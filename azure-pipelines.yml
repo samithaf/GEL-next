@@ -5,6 +5,8 @@
 
 trigger:
 - main
+variables:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 stages:
 - stage: prepare
   pool:
@@ -17,45 +19,8 @@ stages:
         inputs:
          targetType: inline
          script: |
-          docker run --rm -it --env SNYK_TOKEN -v $(Build.SourcesDirectory):/app snyk/snyk:node
-  - job: run_prepare
-    steps:
-    - task: Bash@3
-      displayName: 'Create dist folder'
-      inputs:
-        targetType: 'inline'
-        script: |
-          mkdir -p $(Build.SourcesDirectory)/.dist/src 
-          mkdir -p $(Build.SourcesDirectory)/.dist/lib && echo '' >> $(Build.SourcesDirectory)/.dist/lib/blank.txt 
-          rsync -aF -m $(Build.SourcesDirectory)/ $(Build.SourcesDirectory)/.dist/src/
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/.dist'
-        includeRootFolder: false
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/source.zip'
-    - task: CopyFiles@2
-      displayName: 'Copy source zip'
-      inputs:
-        contents: '**/source.zip'
-        targetFolder: '$(Build.ArtifactStagingDirectory)'
-    - publish: '$(Build.ArtifactStagingDirectory)/source.zip'
-      displayName: 'Publish source zip'
-      artifact: drop
-
-- stage: test
-  dependsOn: prepare
-  jobs:
-  - job: run_test
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - download: current
-      artifact: drop
-    - task: Bash@3
-      inputs:
-        targetType: 'inline'
-        script: |
-          cd $(Pipeline.Workspace)/drop
-          ls && cd $(Build.SourcesDirectory)
-          echo $(Build.BuildId)
+          if [[ "$IS_MAIN" == true ]]; then cmd="monitor"; else cmd="test"; fi
+          echo cmd
+          # docker run --rm -it --env SNYK_TOKEN -v $(Build.SourcesDirectory):/app snyk/snyk:node
+        env:
+          IS_MAIN: $(isMain)
